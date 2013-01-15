@@ -411,7 +411,7 @@ static const char *gravity_string(int gravity) {
 
 static void debug_wm_normal_hints(XSizeHints *size) {
 	if (size->flags & 15) {
-		LOG_XDEBUG("");
+		LOG_XDEBUG("-");
 		if (size->flags & USPosition) {
 			LOG_XDEBUG_("USPosition ");
 		}
