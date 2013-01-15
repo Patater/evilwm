@@ -82,7 +82,8 @@ CC = gcc
 CFLAGS = -Os -std=c99
 WARN = -Wall -W -Wstrict-prototypes -Wpointer-arith -Wcast-align \
 	-Wshadow -Waggregate-return -Wnested-externs -Winline -Wwrite-strings \
-	-Wundef -Wsign-compare -Wmissing-prototypes -Wredundant-decls
+	-Wundef -Wsign-compare -Wmissing-prototypes -Wredundant-decls \
+	-Wno-deprecated-declarations -Werror
 
 # Enable to spot explicit casts that strip constant qualifiers.
 # generally not needed, since an explicit cast should signify
