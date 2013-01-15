@@ -314,6 +314,7 @@ void get_window_type(Client *c);
 /* screen.c */
 
 void drag(Client *c);
+void drag_world(ScreenInfo *s);
 void position_policy(Client *c);
 void moveresizeraise(Client *c);
 void moveresize(Client *c);

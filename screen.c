@@ -225,6 +225,79 @@ void drag(Client *c) {
 	}
 }
 
+void drag_world(ScreenInfo *s) {
+	XEvent ev;
+	int x1, y1; /* pointer position at start of grab in screen co-ordinates */
+	LOG_DEBUG("drag_world(screen=%d)\n", s->screen);
+
+	if (!grab_pointer(s->root, MouseMask, move_curs)) return;
+	get_mouse_position(&x1, &y1, s->root);
+	// Pick one physical screen, based on where mouse initially happens.
+	PhysicalScreen *current_phy = find_physical_screen(s, x1, y1);
+	LOG_DEBUG("(x1, y1): (%d, %d)\n", x1, y1);
+	for (;;) {
+		XMaskEvent(dpy, MouseMask, &ev);
+		switch (ev.type) {
+			case MotionNotify:
+			{
+				struct list *iter;
+				if (ev.xmotion.root != s->root)
+					break;
+				for (iter = clients_tab_order; iter; iter = iter->next) {
+					Client *c = iter->data;
+					// If not on this screen, ignore.
+					if (c->screen != s) continue;
+					// If not on this vdesk, ignore.
+					if (c->vdesk != current_phy->vdesk) continue;
+					// Don't move fixed ones.
+					if (is_fixed(c)) continue;
+
+					int old_screen_x = client_to_Xcoord(c, x);
+					int old_screen_y = client_to_Xcoord(c, y);
+					int screen_x = old_screen_x + (ev.xmotion.x - x1);
+					int screen_y = old_screen_y + (ev.xmotion.y - y1);
+					c->nx = screen_x - c->phy->xoff;
+					c->ny = screen_y - c->phy->yoff;
+
+					if (!no_solid_drag) {
+						XMoveWindow(dpy, c->parent,
+							    client_to_Xcoord(c,x) - c->border,
+							    client_to_Xcoord(c,y) - c->border);
+						send_config(c);
+					}
+				}
+				// Save previous cursor position for next event's baseline
+				// cursor position.
+				x1 = ev.xmotion.x;
+				y1 = ev.xmotion.y;
+				break;
+			}
+			case ButtonRelease:
+			{
+				XUngrabPointer(dpy, CurrentTime);
+				struct list *iter;
+				for (iter = clients_tab_order; iter; iter = iter->next) {
+					Client *c = iter->data;
+					// If not on this screen, ignore.
+					if (c->screen != s) continue;
+					// If not on this vdesk, ignore.
+					if (c->vdesk != current_phy->vdesk) continue;
+					// Don't move fixed ones.
+					if (is_fixed(c)) continue;
+
+					// Move only after the drag is done.
+					if (no_solid_drag) moveresize(c);
+
+					LOG_DEBUG("update phy and vdesk\n");
+					client_calc_phy(c); // Update the vdesk
+				}
+				return;
+			}
+			default: break;
+		}
+	}
+}
+
 /* limit the client to a visible position on the current phy */
 void position_policy(Client *c) {
 	c->nx = MAX(1 - c->width - c->border, MIN(c->nx, c->phy->width));

@@ -333,7 +333,8 @@ static void setup_screens(void) {
 
 	/* set up root window attributes - same for each screen */
 	XSetWindowAttributes attr;
-	attr.event_mask = ChildMask | EnterWindowMask | ColormapChangeMask;
+	attr.event_mask = ChildMask | EnterWindowMask | ColormapChangeMask |
+					  ButtonMask;
 
 	screens = xmalloc(num_screens * sizeof(ScreenInfo));
 	for (int i = 0; i < num_screens; i++) {

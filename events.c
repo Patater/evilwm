@@ -187,6 +187,17 @@ static void handle_button_event(XButtonEvent *e) {
 				client_lower(c); break;
 			default: break;
 		}
+	} else {
+		// If there is no client, then this event is on the root window.
+		ScreenInfo *s = find_screen(e->root);
+		if (s) {
+			switch (e->button) {
+				// TODO Also require "alt" to be held.
+				case Button1:
+					drag_world(s); break;
+				default: break;
+			}
+		}
 	}
 }
 
