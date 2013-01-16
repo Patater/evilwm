@@ -395,8 +395,8 @@ struct annotate_ctx {
 typedef struct annotate_ctx annotate_ctx_t;
 
 annotate_ctx_t annotate_info_ctx = { NULL, &ANNOTATE_INFOBANNER, NULL };
-annotate_ctx_t annotate_drag_ctx = { &shape_outline, &ANNOTATE_MOVERESIZE, &shape_cog };
-annotate_ctx_t annotate_sweep_ctx = { &shape_outline, &ANNOTATE_MOVERESIZE, &shape_cog };
+annotate_ctx_t annotate_drag_ctx = { &shape_outline, NULL, NULL };
+annotate_ctx_t annotate_sweep_ctx = { &shape_outline, &ANNOTATE_MOVERESIZE, NULL };
 
 /*
  * Annotation functions
