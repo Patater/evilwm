@@ -242,7 +242,9 @@ static char* screen_to_display_str(int num) {
 	char *dot = strchr(colon, '.');
 	if (!dot)
 		dot = colon + strlen(colon);
-	snprintf(dot, 5, ".%d", num);
+	int ret = snprintf(dot, 5, ".%d", num);
+	if (ret < 0)
+		abort();
 
 	return display;
 }
