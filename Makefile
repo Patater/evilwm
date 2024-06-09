@@ -76,7 +76,7 @@ OPT_LDLIBS   += $(shell pkg-config --libs pango pangoxft)
 # Build tools
 
 # Change this if you don't use gcc:
-CC = gcc
+CC ?= gcc
 
 # Override if desired:
 CFLAGS = -Os -std=c99
