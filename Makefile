@@ -106,13 +106,7 @@ INSTALL_PROGRAM = $(INSTALL) -m 0755 $(INSTALL_STRIP)
 version = 1.1.0
 distname = evilwm-$(version)
 
-# Generally shouldn't be overridden:
-#  _DEFAULT_SOURCE for strdup and putenv
-#  _POSIX_C_SOURCE=200112L for sigaction
-EVILWM_CPPFLAGS = $(CPPFLAGS) $(OPT_CPPFLAGS) -DVERSION=\"$(version)\" \
-	-D_DEFAULT_SOURCE=1 \
-	-D_POSIX_C_SOURCE=200112L \
-	$(NULL)
+EVILWM_CPPFLAGS = $(CPPFLAGS) $(OPT_CPPFLAGS) -DVERSION=\"$(version)\"
 EVILWM_CFLAGS = -std=c99 $(CFLAGS) $(WARN)
 EVILWM_LDLIBS = -lX11 $(OPT_LDLIBS) $(LDLIBS)
 
