@@ -84,13 +84,14 @@ void sweep(Client *c) {
  *  @arg must be a poiner to an XEvent of type KeyRelease
  */
 static Bool predicate_keyrepeatpress(Display *dummy, XEvent *ev, XPointer arg) {
+	XEvent release_event;
 	(void) dummy;
-	XEvent* release_event = (XEvent*) arg;
+	memcpy(&release_event, arg, sizeof(release_event));
 	if (ev->type != KeyPress)
 		return False;
-	if (release_event->xkey.keycode != ev->xkey.keycode)
+	if (release_event.xkey.keycode != ev->xkey.keycode)
 		return False;
-	return release_event->xkey.time == ev->xkey.time;
+	return release_event.xkey.time == ev->xkey.time;
 }
 
 void show_info(Client *c, unsigned int keycode) {
