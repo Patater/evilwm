@@ -155,3 +155,12 @@ debuild: dist
 .PHONY: clean
 clean:
 	rm -f evilwm$(EXEEXT) $(OBJS)
+
+.PHONY: run
+run:
+	xinit ./xinitrc -- /usr/local/bin/Xephyr \
+	  :100 \
+	  -ac \
+	  -screen 1024x768 \
+	  -host-cursor \
+	  #
